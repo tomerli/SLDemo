@@ -52,7 +52,7 @@ jobs:
         run: |  
           java -jar ./sealights/sl-build-scanner.jar -config \
             -tokenfile sltoken.txt \
-            -appname "swan-java" \
+            -appname "swan-java-ian" \
             -branchname "${{ github.ref_name }}" \
             -buildname "$(date +%s)" \
             -pi "*com.tricentis.swan.station.*"
