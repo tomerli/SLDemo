@@ -1,0 +1,38 @@
+#!/bin/bash
+
+# Set the local repo directory (you can change this as needed)
+REPO_DIR="./SLDemo"
+FUNCTIONS_DIR="$REPO_DIR/src/main/java/com/tricentis/swan/station/functions"
+
+# Clone the repo if it doesn't exist
+if [ ! -d "$REPO_DIR" ]; then
+  echo "Cloning repo..."
+  git clone https://github.com/iflanagan/SLDemo.git
+fi
+
+# Check if the functions directory exists
+if [ ! -d "$FUNCTIONS_DIR" ]; then
+  echo "Functions directory not found: $FUNCTIONS_DIR"
+  exit 1
+fi
+
+# Loop through each Java file in the functions directory
+echo "Adding comments to function classes..."
+for file in "$FUNCTIONS_DIR"/*.java; do
+  class_name=$(basename "$file" .java)
+  comment="// Function class: $class_name"
+
+  # Check if the comment already exists
+  if ! grep -q "$comment" "$file"; then
+    echo "Updating $class_name.java..."
+    tmp_file=$(mktemp)
+    echo "$comment" > "$tmp_file"
+    cat "$file" >> "$tmp_file"
+    mv "$tmp_file" "$file"
+  else
+    echo "Comment already present in $class_name.java"
+  fi
+done
+
+echo "Done!"
+
