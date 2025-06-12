@@ -158,7 +158,7 @@ jobs:
             --mode selenium \
             --base-url http://swan-station:9999/ \
             --sealights-lab-id swan-local \
-            --label "swan-station"
+            --suite "Demo"
       
       - name: Stop and remove Docker Compose services  
         if: always()  
