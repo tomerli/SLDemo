@@ -1,0 +1,106 @@
+/* styles.css */  
+  
+/* Reset some default browser styles */  
+* {  
+    margin: 0;  
+    padding: 0;  
+    box-sizing: border-box;  
+}  
+  
+/* Basic body styling */  
+body {  
+    font-family: Arial, sans-serif;  
+    background-color: #f0f2f5;  
+    color: #333;  
+    line-height: 1.6;  
+    padding: 20px;  
+    display: flex;  
+    flex-direction: column;  
+    align-items: center;  
+}  
+  
+/* Container for main content */  
+.container {  
+    background-color: #fff;  
+    border-radius: 8px;  
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);  
+    padding: 20px;  
+    max-width: 600px;  
+    width: 100%;  
+    margin: 20px 0;  
+}  
+  
+/* Header styling */  
+h1, h2 {  
+    color: #2c3e50;  
+    margin-bottom: 20px;  
+    text-align: center;  
+}  
+  
+/* Image styling */  
+img {  
+    display: block;  
+    margin: 0 auto 20px;  
+    border-radius: 8px;  
+}  
+  
+/* Form styling */  
+form {  
+    display: flex;  
+    flex-direction: column;  
+    gap: 10px;  
+}  
+  
+/* Label styling */  
+label {  
+    font-weight: bold;  
+}  
+  
+/* Select input styling */  
+select {  
+    padding: 8px;  
+    border: 1px solid #ccc;  
+    border-radius: 4px;  
+    font-size: 16px;  
+}  
+  
+/* Button styling */  
+button {  
+    padding: 10px;  
+    border: none;  
+    border-radius: 4px;  
+    background-color: #e74c3c;  
+    color: white;  
+    font-size: 16px;  
+    cursor: pointer;  
+    transition: background-color 0.3s ease;  
+}  
+  
+button:hover {  
+    background-color: #c0392b;  
+}  
+  
+/* List styling */  
+ul {  
+    list-style-type: none;  
+    padding-left: 0;  
+    margin-top: 20px;  
+}  
+  
+li {  
+    padding: 10px;  
+    background-color: #ecf0f1;  
+    border-radius: 4px;  
+    margin-bottom: 10px;  
+}  
+  
+/* Responsive design */  
+@media (max-width: 600px) {  
+    .container {  
+        padding: 15px;  
+    }  
+  
+    select, button {  
+        font-size: 14px;  
+    }  
+}  

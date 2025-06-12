@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Swan Station</title>
+    <link rel="stylesheet" th:href="@{/styles/styles.css}">
+</head>
+<body>
+    <p>
+        <img width="250px" th:src="@{/images/tricentis.png}" />
+    </p>
+    <h1>Swan Station Protocol</h1>
+    <p>
+        <img width="200px" th:src="@{/images/swan.png}" />
+    </p>
+    <form action="/execute" method="post">
+        <label for="function-file">Choose a function:</label>
+        <select name="functionFile" id="function-file">
+            <option th:each="file : ${functions}"
+                    th:value="${file}"
+                    th:text="${file}"></option>
+        </select>
+        <button type="submit" style="background-color: red; color: white;">Execute</button>
+    </form>
+    <h2>Execution Log:</h2>
+    <ul>
+        <li th:each="log : ${logs}" th:text="${log}"></li>
+    </ul>
+</body>
+</html> 

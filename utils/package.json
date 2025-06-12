@@ -1,0 +1,17 @@
+{
+  "name": "swan-station-java",
+  "version": "1.0.0",
+  "description": "![Swan](/docs/screenshot.png?raw=true)",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "random-words": "^2.0.1"
+  }
+}

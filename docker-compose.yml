@@ -1,0 +1,28 @@
+version: '3.8'  
+  
+services:  
+  swan-station:  
+    image: swan-station:latest  
+    container_name: swan-station  
+    ports:  
+      - "9999:9999"  # Expose the swan-station service on port 8080  
+    networks:  
+      - my-network  
+    depends_on:  
+      - selenium  
+    environment:
+      - SL_buildSessionId=${SL_buildSessionId}
+      - SL_labId=${SL_labId}
+      - SL_token=${SL_token}
+  
+  selenium:  
+    image: selenium/standalone-chrome:latest  
+    container_name: selenium  
+    ports:  
+      - "4444:4444"  # Expose Selenium Grid on port 4444  
+    networks:  
+      - my-network  
+  
+networks:  
+  my-network:  
+    driver: bridge

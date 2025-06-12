@@ -1,0 +1,165 @@
+name: Build / Run / Test
+on:
+  workflow_run:  
+    workflows: ["Rolling Functions"]  
+    types:  
+      - completed  
+  push:  
+    branches:  
+      - main  
+
+jobs:  
+  build:  
+    name: Build  
+    runs-on: ubuntu-latest  
+    outputs:  
+      buildSessionId: ${{ steps.get_build_session_id.outputs.buildSessionId }}  
+    steps:  
+      - name: Checkout repository  
+        uses: actions/checkout@v4.2.2  
+    
+      - name: Set up JDK
+        uses: actions/setup-java@v4.2.1
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Download SeaLights Agent
+        run: |
+          curl -s -o sealights-java-latest.zip https://agents.sealights.co/sealights-java/sealights-java-latest.zip
+          unzip -oq sealights-java-latest.zip -d ./sealights
+          rm sealights-java-latest.zip
+    
+      - name: Build with Gradle
+        run: |
+          ./gradlew clean build -x test
+
+      - name: Decode SEALIGHTS_TOKEN
+        run: |  
+          echo "${{ secrets.SEALIGHTS_TOKEN }}" 
+
+      - name: Decrypt SEALIGHTS_TOKEN 
+        id: decrypt-sealights-token
+        run: |  
+          export SEALIGHTS_TOKEN_DECRYPTED=$(echo "${{ secrets.SEALIGHTS_TOKEN }}")  
+          echo "value=$SEALIGHTS_TOKEN_DECRYPTED" >> $GITHUB_OUTPUT  
+          echo "$SEALIGHTS_TOKEN_DECRYPTED" > sltoken.txt
+    
+      - name: "SeaLights: Configure"
+        env:  
+          BRANCH_NAME: ${{ github.ref_name }}  
+          RUN_NUMBER: ${{ github.run_number }}  
+        run: |  
+          java -jar ./sealights/sl-build-scanner.jar -config \
+            -tokenfile sltoken.txt \
+            -appname "swan-java" \
+            -branchname "${{ github.ref_name }}" \
+            -buildname "$(date +%s)" \
+            -pi "*com.tricentis.swan.station.*"
+    
+      - name: "SeaLights: Scan"
+        run: |  
+          java -jar ./sealights/sl-build-scanner.jar -scan \
+            -tokenfile sltoken.txt \
+            -buildsessionidfile buildSessionId.txt \
+            -workspacepath "./build" \
+            -fi "*.class" \
+            -r
+    
+      - name: Extract buildSessionId  
+        id: get_build_session_id  
+        run: |  
+          buildSessionId=$(cat ./buildSessionId.txt)  
+          echo "buildSessionId=$buildSessionId" >> $GITHUB_OUTPUT
+    
+      - name: Upload build artifact  
+        uses: actions/upload-artifact@v4.6.2
+        with:  
+          name: target
+          path: ./build
+          retention-days: 1
+
+      - name: Upload SeaLights agent
+        uses: actions/upload-artifact@v4.6.2
+        with:
+          name: sealights
+          path: ./sealights
+          retention-days: 1
+  
+  run-test:  
+    name: Run & Test
+    runs-on: ubuntu-latest  
+    needs: build
+    environment: Local
+    steps:  
+      - name: Checkout code  
+        uses: actions/checkout@v4.2.2  
+  
+      - name: Download build artifact  
+        uses: actions/download-artifact@v4.3.0
+        with:  
+          name: target
+
+      - name: Download SeaLights agent
+        uses: actions/download-artifact@v4.3.0
+        with:
+          name: sealights
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4.2.1
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+      
+      - name: Containerize
+        run: docker build -t swan-station .
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3.10.0  
+    
+      - name: Install Docker Compose  
+        run: |  
+          sudo apt-get update  
+          sudo apt-get install -y docker-compose  
+
+      - name: Decode SEALIGHTS_TOKEN
+        run: |  
+          echo "${{ secrets.SEALIGHTS_TOKEN }}"
+
+      - name: Decrypt SEALIGHTS_TOKEN 
+        id: decrypt-sealights-token
+        run: |  
+          export SEALIGHTS_TOKEN_DECRYPTED=$(echo "${{ secrets.SEALIGHTS_TOKEN }}") 
+          echo "value=$SEALIGHTS_TOKEN_DECRYPTED" >> $GITHUB_OUTPUT  
+          echo "$SEALIGHTS_TOKEN_DECRYPTED" > sltoken.txt
+    
+      - name: Build and run with Docker Compose  
+        env:
+          SL_buildSessionId: ${{ needs.build.outputs.buildSessionId }}
+          SL_labId: swan-local
+          SL_token: ${{ secrets.SEALIGHTS_TOKEN }}
+        run: |  
+          echo "${{ steps.decrypt-sealights-token.outputs.value }}" > sltoken.txt
+          echo "${{ needs.build.outputs.buildSessionId }}" > buildSessionId.txt
+          docker-compose up -d --build  
+
+      - name: Run Tests
+        run: |
+          ./gradlew test
+
+      - name: Test (Testim Automation)
+        run: |
+          npm install -g @testim/testim-cli
+          testim \
+            --token ${{ secrets.TESTIM_PROJECT_TOKEN }} \
+            --project ${{ secrets.TESTIM_PROJECT_ID }} \
+            --host localhost \
+            --headless \
+            --mode selenium \
+            --base-url http://swan-station:9999/ \
+            --sealights-lab-id swan-local \
+            --label "swan-station"
+      
+      - name: Stop and remove Docker Compose services  
+        if: always()  
+        run: docker-compose down
