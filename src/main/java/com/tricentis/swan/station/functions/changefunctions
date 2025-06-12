@@ -1,12 +1,12 @@
 #!/bin/bash
 
 REPO_DIR="./SLDemo"
-FUNCTIONS_DIR="$REPO_DIR/src/main/java/com/tricentis/swan/station/functions"
+FUNCTIONS_DIR="/Users/i.michael-flanagan/Workspace/IanSealights/swan-java/src/main/java/com/tricentis/swan/station/functions"
 
 # Clone the repo if it doesn't exist
 if [ ! -d "$REPO_DIR" ]; then
   echo "Cloning repo..."
-  git clone https://github.com/iflanagan/SLDemo.git
+#  git clone https://github.com/iflanagan/SLDemo.git
 fi
 
 if [ ! -d "$FUNCTIONS_DIR" ]; then
@@ -41,9 +41,9 @@ for file in "${selected_files[@]}"; do
   ' "$file" > "$tmp_file"
 
   mv "$tmp_file" "$file"
-  echo "✅ Updated: $class_name.java"
+  echo " Updated: $class_name.java"
 done
 
 echo ""
-echo "🎉 Done updating 2 random function classes."
+echo " Done updating 2 random function classes."
 
