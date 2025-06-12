@@ -1,21 +1,21 @@
 #!/bin/bash
 
-REPO_DIR="./SLDemo"
-FUNCTIONS_DIR="/Users/i.michael-flanagan/Workspace/IanSealights/swan-java/src/main/java/com/tricentis/swan/station/functions"
+# Set relative path to Java function classes within the repo
+FUNCTIONS_DIR="./src/main/java/com/tricentis/swan/station/functions"
 
-# Clone the repo if it doesn't exist
-if [ ! -d "$REPO_DIR" ]; then
-  echo "Cloning repo..."
-#  git clone https://github.com/iflanagan/SLDemo.git
-fi
-
+# Check if the directory exists
 if [ ! -d "$FUNCTIONS_DIR" ]; then
-  echo "Functions directory not found: $FUNCTIONS_DIR"
+  echo " Functions directory not found: $FUNCTIONS_DIR"
   exit 1
 fi
 
-# Fallback for systems without `shuf` using `sort -R` and `head`
+# Select 2 random .java files
 selected_files=($(find "$FUNCTIONS_DIR" -maxdepth 1 -name "*.java" | sort -R | head -n 2))
+
+if [ ${#selected_files[@]} -eq 0 ]; then
+  echo "⚠️ No Java function files found in $FUNCTIONS_DIR"
+  exit 0
+fi
 
 echo "🔀 Randomly selected files:"
 for file in "${selected_files[@]}"; do
@@ -23,6 +23,7 @@ for file in "${selected_files[@]}"; do
 done
 echo ""
 
+# Add comment header to each selected file
 for file in "${selected_files[@]}"; do
   class_name=$(basename "$file" .java)
   new_comment="// Function class: $class_name - Updated automatically"
@@ -41,9 +42,8 @@ for file in "${selected_files[@]}"; do
   ' "$file" > "$tmp_file"
 
   mv "$tmp_file" "$file"
-  echo " Updated: $class_name.java"
+  echo "✅ Updated: $class_name.java"
 done
 
 echo ""
-echo " Done updating 2 random function classes."
-
+echo "🎉 Done updating 2 random function classes."
