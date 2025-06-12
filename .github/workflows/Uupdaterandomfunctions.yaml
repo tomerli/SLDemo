@@ -1,0 +1,22 @@
+name: UpdateRandomFunctions
+
+on:
+  schedule:
+    - cron: '0 * * * *'  # Every hour
+  workflow_dispatch:      # Optional: manual run
+
+permissions: {}
+
+jobs:
+  roll-functions:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v3
+
+      - name: 🔐 Set script permissions
+        run: chmod +x .github/scripts/changefunctions.sh
+
+      - name: 🚀 Run changefunctions script
+        run: .github/scripts/changefunctions.sh
