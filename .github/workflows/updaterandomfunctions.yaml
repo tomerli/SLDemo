@@ -1,4 +1,4 @@
-\name: Rolling Functions
+name: Rolling Functions
 
 on:
   schedule:
