@@ -10,7 +10,7 @@ public class Function_limited_lungs_seven implements Function {
     */
     @Override
     public String execute() {
-        System.out.println("function_limited_lungs_seven executed");
+        System.out.println("function_limited_lungs_seven executed.");
         return "function_limited_lungs_seven executed";
     }
 }
