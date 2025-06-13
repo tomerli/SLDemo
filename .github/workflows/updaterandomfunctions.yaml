@@ -1,4 +1,4 @@
-name: Rolling Functions
+name: Randomly Update Functions
 
 on:
   schedule:
