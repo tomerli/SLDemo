@@ -29,5 +29,6 @@ echo ""
 # Add comment to each selected file
 for file in "${selected_files[@]}"; do
   class_name=$(basename "$file" .java)
-  new_comment="// Functi_
+  new_comment="// Function updated automatically by script - $(date)"
+
 
