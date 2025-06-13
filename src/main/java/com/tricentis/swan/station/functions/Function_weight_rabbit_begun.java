@@ -1,3 +1,4 @@
+// Function class: Function_weight_rabbit_begun - Updated automatically
 package com.tricentis.swan.station.functions;
 
 import org.springframework.stereotype.Component;
