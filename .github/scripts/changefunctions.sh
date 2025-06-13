@@ -30,5 +30,5 @@ echo ""
 for file in "${selected_files[@]}"; do
   class_name=$(basename "$file" .java)
   new_comment="// Function updated automatically by script - $(date)"
-
+done
 
