@@ -136,7 +136,7 @@ jobs:
       - name: Build and run with Docker Compose  
         env:
           SL_buildSessionId: ${{ needs.build.outputs.buildSessionId }}
-          SL_labId: swan-local
+          SL_labId: swan-ian
           SL_token: ${{ secrets.SEALIGHTS_TOKEN }}
         run: |  
           echo "${{ steps.decrypt-sealights-token.outputs.value }}" > sltoken.txt
