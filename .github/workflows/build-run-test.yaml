@@ -157,7 +157,7 @@ jobs:
             --headless \
             --mode selenium \
             --base-url http://swan-station:9999/ \
-            --sealights-lab-id swan-local \
+            --sealights-lab-id swan-ian \
             --suite "Demo" \
             --result-label ${{github.run_number}} 
       
