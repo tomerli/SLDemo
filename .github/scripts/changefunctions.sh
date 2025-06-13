@@ -26,9 +26,20 @@ for file in "${selected_files[@]}"; do
 done
 echo ""
 
-# Add comment to each selected file
+# Process each selected file
 for file in "${selected_files[@]}"; do
   class_name=$(basename "$file" .java)
   new_comment="// Function updated automatically by script - $(date)"
+  
+  # Add comment to top of file (Linux sed)
+  sed -i "1s|^|$new_comment\n|" "$file"
+
+  # Modify System.out.println lines:
+  # If the string ends with . before the quote, remove the dot
+  sed -i 's/\(System\.out\.println.*"\)\.\("\s*;\)/\1\2/' "$file"
+
+  # If the string ends with quote and semicolon, but no dot, add dot
+  sed -i 's/\(System\.out\.println.*[^\.]"\)\(\s*;\)/\1.\2/' "$file"
 done
 
+echo "🎉 Done updating ${#selected_files[@]} function classes."
