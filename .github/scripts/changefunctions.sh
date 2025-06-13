@@ -12,29 +12,24 @@ if [ ! -d "$FUNCTIONS_DIR" ]; then
   exit 1
 fi
 
-# Select 2 random .java files
-selected_files=($(find "$FUNCTIONS_DIR" -maxdepth 1 -name "*.java" | sort -R | head -n 2))
+# Process all .java files
+java_files=($(find "$FUNCTIONS_DIR" -maxdepth 1 -name "*.java"))
 
-if [ ${#selected_files[@]} -eq 0 ]; then
-  echo "⚠️  No Java function files found in $FUNCTIONS_DIR"
+if [ ${#java_files[@]} -eq 0 ]; then
+  echo "No Java function files found in $FUNCTIONS_DIR"
   exit 0
 fi
 
-echo "🔀 Randomly selected files:"
-for file in "${selected_files[@]}"; do
+echo "Processing files in $FUNCTIONS_DIR:"
+for file in "${java_files[@]}"; do
   echo " - $(basename "$file")"
-done
-echo ""
+  
+  # First, remove a period before the closing quote, if present
+  sed -i 's/\(System\.out\.println(".* executed\)\.\("\s*;\)/\1\2/g' "$file"
 
-# Process each selected file
-for file in "${selected_files[@]}"; do
-  class_name=$(basename "$file" .java)
-
-  # Remove any . or ! before the closing quote
-  sed -i "s|System\.out\.println(\"${class_name} executed[.!]\"|System.out.println(\"${class_name} executed\"|g" "$file"
-
-  # Add exclamation mark before the closing quote
-  sed -i "s|System\.out\.println(\"${class_name} executed\"|System.out.println(\"${class_name} executed!\"|g" "$file"
+  # Next, add a period before the closing quote if missing
+  sed -i 's/\(System\.out\.println(".* executed\)"\s*;\)/echoed;/' "$file"
+  sed -i 's/\(System\.out\.println(".* executed\)"\s*;\)/\1\./g' "$file"
 done
 
-echo "✅ Done updating ${#selected_files[@]} function classes."
+echo "✅ Done updating punctuation in System.out.println lines."
