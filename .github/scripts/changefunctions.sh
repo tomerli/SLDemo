@@ -12,24 +12,32 @@ if [ ! -d "$FUNCTIONS_DIR" ]; then
   exit 1
 fi
 
-# Process all .java files
-java_files=($(find "$FUNCTIONS_DIR" -maxdepth 1 -name "*.java"))
+# Find all .java files and select 2 randomly
+java_files=($(find "$FUNCTIONS_DIR" -maxdepth 1 -name "*.java" | sort -R | head -n 2))
 
 if [ ${#java_files[@]} -eq 0 ]; then
-  echo "No Java function files found in $FUNCTIONS_DIR"
+  echo "⚠️  No Java function files found in $FUNCTIONS_DIR"
   exit 0
 fi
 
-echo "Processing files in $FUNCTIONS_DIR:"
+echo "🔀 Randomly selected files:"
 for file in "${java_files[@]}"; do
   echo " - $(basename "$file")"
-  
-  # First, remove a period before the closing quote, if present
+done
+echo ""
+
+# Process the selected files
+for file in "${java_files[@]}"; do
+  # Remove a period before the closing quote, if present
   sed -i 's/\(System\.out\.println(".* executed\)\.\("\s*;\)/\1\2/g' "$file"
 
-  # Next, add a period before the closing quote if missing
-  sed -i 's/\(System\.out\.println(".* executed\)"\s*;\)/echoed;/' "$file"
-  sed -i 's/\(System\.out\.println(".* executed\)"\s*;\)/\1\./g' "$file"
+  # Add a period before the closing quote if missing
+  sed -i 's/\(System\.out\.println(".* executed\)\("\s*;\)/\1.\2/g' "$file"
+
+  # Print the function class name updated
+  class_name=$(basename "$file" .java)
+  echo "✅ Updated: $class_name"
 done
 
-echo "✅ Done updating punctuation in System.out.println lines."
+echo ""
+echo "🎉 Done updating 2 function classes."
