@@ -29,15 +29,11 @@ echo ""
 # Process each selected file
 for file in "${selected_files[@]}"; do
   class_name=$(basename "$file" .java)
-  new_comment="// Function updated automatically by script - $(date)"
 
-  # Add comment to top of file
-  sed -i "1s|^|$new_comment\n|" "$file"
-
-  # Remove . or ! if present before the closing quote
+  # Remove any . or ! before the closing quote
   sed -i "s|System\.out\.println(\"${class_name} executed[.!]\"|System.out.println(\"${class_name} executed\"|g" "$file"
 
-  # Then add a single exclamation mark before the quote
+  # Add exclamation mark before the closing quote
   sed -i "s|System\.out\.println(\"${class_name} executed\"|System.out.println(\"${class_name} executed!\"|g" "$file"
 done
 
