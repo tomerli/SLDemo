@@ -34,14 +34,11 @@ for file in "${selected_files[@]}"; do
   # Add comment to top of file
   sed -i "1s|^|$new_comment\n|" "$file"
 
-  # Build the target string
-  expected_line="System.out.println(\"${class_name} executed"
-  
-  # Remove period if present
-  sed -i "s|System\.out\.println(\"${class_name} executed\.\"|System.out.println(\"${class_name} executed\"|g" "$file"
+  # Remove . or ! if present before the closing quote
+  sed -i "s|System\.out\.println(\"${class_name} executed[.!]\"|System.out.println(\"${class_name} executed\"|g" "$file"
 
-  # Add period if missing (match line ending in ...executed")
-  sed -i "s|System\.out\.println(\"${class_name} executed\"|System.out.println(\"${class_name} executed.\"|g" "$file"
+  # Then add a single exclamation mark before the quote
+  sed -i "s|System\.out\.println(\"${class_name} executed\"|System.out.println(\"${class_name} executed!\"|g" "$file"
 done
 
 echo "✅ Done updating ${#selected_files[@]} function classes."
