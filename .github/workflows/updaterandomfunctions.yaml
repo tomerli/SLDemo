@@ -1,0 +1,33 @@
+name: Rolling Functions
+
+on:
+  schedule:
+    - cron: '0 * * * *'  # Every hour
+  workflow_dispatch:      # Manual trigger
+
+permissions: write-all
+
+jobs:
+  roll-functions:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Check files
+        run: pwd; ls
+
+      - name: Make script executable
+        run: chmod +x .github/scripts/changefunctions.sh
+
+      - name: Run changefunctions.sh
+        run: .github/scripts/changefunctions.sh
+
+      - name: Commit and push changes
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add src/main/java/com/tricentis/swan/station/functions/*.java
+          git commit -m "🔁 Auto-update 2 random function classes" || echo "No changes to commit"
+          git push
