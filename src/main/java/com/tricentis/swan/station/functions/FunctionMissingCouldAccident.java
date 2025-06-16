@@ -5,7 +5,7 @@ package functions;
  */
 public class FunctionMissingCouldAccident {
     public String functionMissingCouldAccident() {
-        System.out.println("functionMissingCouldAccident executed");
+        System.out.println("functionMissingCouldAccident executed.");
         return "functionMissingCouldAccident executed";
     }
 }
