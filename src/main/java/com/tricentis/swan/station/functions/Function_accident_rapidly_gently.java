@@ -7,7 +7,7 @@ import com.tricentis.swan.station.functions.Function;
 public class Function_accident_rapidly_gently implements Function {
     @Override
     public String execute() {
-        System.out.println("function_accident_rapidly_gently executed!");
+        System.out.println("function_accident_rapidly_gently executed");
         return "function_accident_rapidly_gently executed";
     }
 }
