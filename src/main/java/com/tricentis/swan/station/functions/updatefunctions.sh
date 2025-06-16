@@ -26,19 +26,30 @@ for file in "${java_files[@]}"; do
 done
 echo ""
 
-# Process the selected files
+# Array to store modified files
+modified_files=()
+
+# Clear or create output file
+output_file="$REPO_DIR/updated_files.txt"
+> "$output_file"
+
+# Process each selected file
 for file in "${java_files[@]}"; do
-  # Remove a period directly before the closing quote (e.g., "executed." => "executed")
-  sed -i -E 's/(System\.out\.println\(".*executed)\.(\"\s*;)/\1\2/' "$file"
+  # Remove period if it exists after 'executed'
+  sed -E -i '' 's/(System\.out\.println\(".*executed)\.(\"\s*;)/\1\2/' "$file"
 
-  # Add a period if it's missing before the closing quote (e.g., "executed" => "executed.")
-  sed -i -E 's/(System\.out\.println\(".*executed)(\"\s*;)/\1.\2/' "$file"
+  # Add a period if missing
+  sed -E -i '' 's/(System\.out\.println\(".*executed)(\"\s*;)/\1.\2/' "$file"
 
-  # Output which file was updated
   class_name=$(basename "$file" .java)
   echo "✅ Updated: $class_name"
+
+  # Track and write just the filename (no path)
+  modified_files+=("$class_name.java")
+  echo "$class_name.java" >> "$output_file"
 done
 
 echo ""
-echo "🎉 Done updating 2 random function classes."
+echo "🎉 Done updating ${#modified_files[@]} function classes."
+echo "📝 Filenames written to: $output_file"
 
