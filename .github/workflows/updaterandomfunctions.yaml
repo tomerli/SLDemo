@@ -31,3 +31,9 @@ jobs:
           git add src/main/java/com/tricentis/swan/station/functions/*.java
           git commit -m "🔁 Auto-update 2 random function classes" || echo "No changes to commit"
           git push
+
+  call-build-run-test:
+    needs: roll-functions
+    uses: ./.github/workflows/build-run-test.yml
+    with:
+      environment: Local
