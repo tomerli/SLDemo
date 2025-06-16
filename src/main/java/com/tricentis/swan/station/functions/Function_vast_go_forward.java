@@ -1,3 +1,4 @@
+// Function class: Function_vast_go_forward - Updated automatically
 package com.tricentis.swan.station.functions;
 
 import org.springframework.stereotype.Component;
