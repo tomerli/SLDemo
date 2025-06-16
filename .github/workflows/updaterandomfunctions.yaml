@@ -34,6 +34,6 @@ jobs:
 
   call-build-run-test:
     needs: roll-functions
-    uses: .github/workflows/build-run-test.yaml
+    uses: .github/workflows/build-run-test.yaml@main
     with:
       environment: Local
