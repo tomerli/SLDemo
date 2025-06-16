@@ -1,7 +1,6 @@
 #!/bin/bash
 
 # Set relative path to Java function classes within the repo
-# FUNCTIONS_DIR="./src/main/java/com/tricentis/swan/station/functions"
 FUNCTIONS_DIR=$(pwd)
 
 # Check if the directory exists
@@ -30,23 +29,5 @@ for file in "${selected_files[@]}"; do
   new_comment="// Function class: $class_name - Updated automatically"
   tmp_file=$(mktemp)
 
-  # Add or replace comment at the top
-  awk -v comment="$new_comment" '
-    NR == 1 && $0 ~ /^\/\/ Function class:/ { print comment; next }
-    NR == 1 && $0 !~ /^\/\// { print comment }
-    { print }
-  ' "$file" > "$tmp_file"
-
-  # Fix System.out.println punctuation after 'executed'
-  sed -E \
-    -e 's/(System\.out\.println\(".* executed)\.(\"\s*;)/\1\2/' \
-    -e 's/(System\.out\.println\(".* executed)(\"\s*;)/\1.\2/' \
-    "$tmp_file" > "${tmp_file}_fixed"
-
-  mv "${tmp_file}_fixed" "$file"
-  echo "✅ Updated: $class_name.java"
-done
-
-echo ""
-echo "🎉 Done updating 2 random function classes."
+  # Add or replace comment at the to
 
