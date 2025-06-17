@@ -36,5 +36,17 @@ for file in "${java_files[@]}"; do
   echo " Updated: $(basename "$file" .java)"
 done
 
+
+# Force a visible change by updating a timestamp comment
+timestamp="// Updated by GitHub Actions on $(date -u +"%Y-%m-%dT%H:%M:%SZ")"
+
+tmp_file=$(mktemp)
+awk -v ts="$timestamp" '
+  NR == 1 && /^\/\/ Updated by GitHub Actions on/ { print ts; next }
+  NR == 1 { print ts; print }
+  NR > 1 { print }
+' "$file" > "$tmp_file" && mv "$tmp_file" "$file"
+
+
 echo ""
 echo "Done updating 2 function classes."
