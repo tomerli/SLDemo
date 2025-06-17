@@ -1,4 +1,3 @@
-// Function class: Function_environment_saved_loud - Updated automatically
 package com.tricentis.swan.station.functions;
 
 import org.springframework.stereotype.Component;
@@ -7,7 +6,7 @@ import org.springframework.stereotype.Component;
 public class Function_environment_saved_loud implements Function {
     @Override
     public String execute() {
-        System.out.println("function_environment_saved_loud executed");
+        System.out.println("function_environment_saved_loud executed.");
         return "function_environment_saved_loud executed";
     }
 }

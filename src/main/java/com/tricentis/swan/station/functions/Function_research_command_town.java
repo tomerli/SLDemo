@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 public class Function_research_command_town implements Function {
     @Override
     public String execute() {
-        System.out.println("function_research_command_town executed");
+        System.out.println("function_research_command_town executed.");
         return "function_research_command_town executed";
     }
 }

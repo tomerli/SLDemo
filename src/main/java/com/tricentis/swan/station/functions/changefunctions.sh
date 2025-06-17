@@ -1,53 +1,43 @@
 #!/bin/bash
 
-# Author Ian Flanagan Tricentis 2025
+# Author: Ian Flanagan Tricentis 2025
 
-# Set path to Java function classes
+REPO_DIR=$(pwd)
 FUNCTIONS_DIR=$(pwd)
 
-# Check if directory exists
+# Validate functions directory
 if [ ! -d "$FUNCTIONS_DIR" ]; then
-  echo "❌ Functions directory not found: $FUNCTIONS_DIR"
+  echo "Functions directory not found: $FUNCTIONS_DIR"
   exit 1
 fi
 
-# Select 2 random .java files
-selected_files=($(find "$FUNCTIONS_DIR" -maxdepth 1 -name "*.java" | sort -R | head -n 2))
+# Select 2 random Java files
+java_files=($(find "$FUNCTIONS_DIR" -maxdepth 1 -name "Function*.java" | sort -R | head -n 2))
 
-if [ ${#selected_files[@]} -eq 0 ]; then
-  echo "⚠️ No Java function files found in $FUNCTIONS_DIR"
+if [ ${#java_files[@]} -eq 0 ]; then
+  echo "No Java function files found in $FUNCTIONS_DIR"
   exit 0
 fi
 
-echo "🔀 Randomly selected files:"
-for file in "${selected_files[@]}"; do
+echo "Randomly selected files:"
+for file in "${java_files[@]}"; do
   echo " - $(basename "$file")"
 done
 echo ""
 
-# Modify and show diffs
-for file in "${selected_files[@]}"; do
-  class_name=$(basename "$file" .java)
-  new_comment="// Function class: $class_name - Updated automatically"
-  tmp_file=$(mktemp)
+# Process each selected file
+for file in "${java_files[@]}"; do
+  # Fix System.out.println punctuation issues
 
-  {
-    echo "$new_comment"
-    # Add period to println if missing before quote
-    sed -E 's/(System\.out\.println\(".*[^.!?])"(\);)/\1."\\2/' "$file"
-  } > "$tmp_file"
+  # Remove period after 'executed' if present
+  sed -i '' -E 's/(System\.out\.println\("function[[:alnum:]_]+ executed)"\.\)/\1")/' "$file"
 
-  # Only overwrite if file actually changed
-  if ! diff -q "$file" "$tmp_file" > /dev/null; then
-    echo "✅ Updated: $class_name"
-    echo "🔄 Changes:"
-    diff --unified "$file" "$tmp_file" | sed 's/^/    /'
-    mv "$tmp_file" "$file"
-  else
-    echo "ℹ️  No changes needed: $class_name"
-    rm "$tmp_file"
-  fi
+  # Add period if missing
+  sed -i '' -E 's/(System\.out\.println\("function[[:alnum:]_]+ executed)"\)/\1.")/' "$file"
 
-  echo ""
-done
+  echo "✅ Updated: $(basename "$file" .java)"
+
+done 
+echo ""
+echo "✅ Done updating ${#java_files[@]} function class(es)."
 
