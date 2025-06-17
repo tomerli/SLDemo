@@ -22,7 +22,10 @@ jobs:
         run: chmod +x .github/scripts/changefunctions.sh
 
       - name: Run changefunctions.sh
-        run: .github/scripts/changefunctions.sh; git status
+        run: |
+          myFiles=$(.github/scripts/changefunctions.sh | awk '/^ - / { print $2 }')
+          myFileOne=$(echo $myFiles | head -1)
+          myFileTwo=$(echo $myFiles | tail -1)
 
       - name: Commit and push changes
         run: |
@@ -30,9 +33,10 @@ jobs:
           git config user.email "github-actions@github.com"
           CHANGED=$(git status --porcelain | grep 'src/main/java/com/tricentis/swan/station/functions/.*\.java' | wc -l)
           if [ "$CHANGED" -gt 0 ]; then
-            git add src/main/java/com/tricentis/swan/station/functions/*.java
-            git commit -m "🔁 Auto-update 2 random function classes"
-            git push
+            git add src/main/java/com/tricentis/swan/station/functions/$myFileOne
+             git add src/main/java/com/tricentis/swan/station/functions/$myFileTwo
+            git commit -m "updated two functions: $myFileOne and $myFileTwo"
+            git push origin HEAD
           else
             echo "No Java file changes to commit"
           fi
