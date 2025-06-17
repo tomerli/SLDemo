@@ -22,7 +22,7 @@ jobs:
         run: chmod +x .github/scripts/changefunctions.sh
 
       - name: Run changefunctions.sh
-        run: .github/scripts/changefunctions.sh
+        run: .github/scripts/changefunctions.sh; git status
 
       - name: Commit and push changes
         run: |
