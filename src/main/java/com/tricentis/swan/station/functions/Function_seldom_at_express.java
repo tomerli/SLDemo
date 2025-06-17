@@ -1,3 +1,4 @@
+// Function class: Function_seldom_at_express - Updated automatically
 package com.tricentis.swan.station.functions;
 
 import org.springframework.stereotype.Component;

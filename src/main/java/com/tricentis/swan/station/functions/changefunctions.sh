@@ -1,9 +1,11 @@
 #!/bin/bash
 
-# Set relative path to Java function classes within the repo
+# Author Ian Flanagan Tricentis 2025
+
+# Set path to Java function classes
 FUNCTIONS_DIR=$(pwd)
 
-# Check if the directory exists
+# Check if directory exists
 if [ ! -d "$FUNCTIONS_DIR" ]; then
   echo "❌ Functions directory not found: $FUNCTIONS_DIR"
   exit 1
@@ -23,11 +25,29 @@ for file in "${selected_files[@]}"; do
 done
 echo ""
 
-# Add comment header and fix System.out.println punctuation
+# Modify and show diffs
 for file in "${selected_files[@]}"; do
   class_name=$(basename "$file" .java)
   new_comment="// Function class: $class_name - Updated automatically"
   tmp_file=$(mktemp)
 
-  # Add or replace comment at the to
+  {
+    echo "$new_comment"
+    # Add period to println if missing before quote
+    sed -E 's/(System\.out\.println\(".*[^.!?])"(\);)/\1."\\2/' "$file"
+  } > "$tmp_file"
+
+  # Only overwrite if file actually changed
+  if ! diff -q "$file" "$tmp_file" > /dev/null; then
+    echo "✅ Updated: $class_name"
+    echo "🔄 Changes:"
+    diff --unified "$file" "$tmp_file" | sed 's/^/    /'
+    mv "$tmp_file" "$file"
+  else
+    echo "ℹ️  No changes needed: $class_name"
+    rm "$tmp_file"
+  fi
+
+  echo ""
+done
 

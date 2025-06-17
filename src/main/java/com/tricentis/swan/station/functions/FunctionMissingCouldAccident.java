@@ -1,3 +1,4 @@
+// Function class: FunctionMissingCouldAccident - Updated automatically
 package functions;
 
 /**

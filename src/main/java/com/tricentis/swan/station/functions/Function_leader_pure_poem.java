@@ -1,3 +1,4 @@
+// Function class: Function_leader_pure_poem - Updated automatically
 package com.tricentis.swan.station.functions;
 
 import org.springframework.stereotype.Component;
@@ -6,7 +7,7 @@ import org.springframework.stereotype.Component;
 public class Function_leader_pure_poem implements Function {
     @Override
     public String execute() {
-        System.out.println("function_leader_pure_poem executed");
+        System.out.println("function_leader_pure_poem executed."\2
         return "function_leader_pure_poem executed";
     }
 }
