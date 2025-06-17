@@ -5,7 +5,7 @@ package functions;
  */
 public class FunctionNobodyRaysFor {
     public String functionNobodyRaysFor() {
-        System.out.println("functionNobodyRaysFor executed");
+        System.out.println("functionNobodyRaysFor executed.");
         return "functionNobodyRaysFor executed";
     }
 }
