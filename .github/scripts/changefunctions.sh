@@ -2,42 +2,51 @@
 
 # Author: Ian Flanagan Tricentis 2025
 
-# Set paths relative to repo
 REPO_DIR=$(pwd)
 FUNCTIONS_DIR="$REPO_DIR/src/main/java/com/tricentis/swan/station/functions"
 
 # Validate functions directory
 if [ ! -d "$FUNCTIONS_DIR" ]; then
-  echo "❌ Functions directory not found: $FUNCTIONS_DIR"
+  echo "Functions directory not found: $FUNCTIONS_DIR"
   exit 1
 fi
 
-# Find all .java files and select 2 randomly
-java_files=($(find "$FUNCTIONS_DIR" -maxdepth 1 -name "*.java" | sort -R | head -n 2))
+# Select 2 random Java files
+java_files=($(find "$FUNCTIONS_DIR" -maxdepth 1 -name "Function*.java" | sort -R | head -n 2))
 
 if [ ${#java_files[@]} -eq 0 ]; then
-  echo "⚠️  No Java function files found in $FUNCTIONS_DIR"
+  echo "No Java function files found in $FUNCTIONS_DIR"
   exit 0
 fi
 
-echo "🔀 Randomly selected files:"
+echo "Randomly selected files:"
 for file in "${java_files[@]}"; do
   echo " - $(basename "$file")"
 done
 echo ""
 
-# Process the selected files
+# Process each selected file
 for file in "${java_files[@]}"; do
-  # Remove a period before the closing quote, if present
-  sed -i 's/\(System\.out\.println(".* executed\)\.\("\s*;\)/\1\2/g' "$file"
+  # Remove period after 'executed' if present
+  sed -i -E 's/(System\.out\.println\("function[[:alnum:]_]+ executed)\.(\"\s*;)/\1\2/' "$file"
 
-  # Add a period before the closing quote if missing
-  sed -i 's/\(System\.out\.println(".* executed\)\("\s*;\)/\1.\2/g' "$file"
+  # Add period if missing
+  sed -i -E 's/(System\.out\.println\("function[[:alnum:]_]+ executed)(\"\s*;)/\1.\2/' "$file"
 
-  # Print the function class name updated
-  class_name=$(basename "$file" .java)
-  echo "✅ Updated: $class_name"
+  echo " Updated: $(basename "$file" .java)"
 done
 
+
+# Force a visible change by updating a timestamp comment
+timestamp="// Updated by GitHub Actions on $(date -u +"%Y-%m-%dT%H:%M:%SZ")"
+
+tmp_file=$(mktemp)
+awk -v ts="$timestamp" '
+  NR == 1 && /^\/\/ Updated by GitHub Actions on/ { print ts; next }
+  NR == 1 { print ts; print }
+  NR > 1 { print }
+' "$file" > "$tmp_file" && mv "$tmp_file" "$file"
+
+
 echo ""
-echo "🎉 Done updating 2 function classes."
+echo "Done updating 2 function classes."

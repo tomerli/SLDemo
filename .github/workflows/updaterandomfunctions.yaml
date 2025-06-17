@@ -22,18 +22,23 @@ jobs:
         run: chmod +x .github/scripts/changefunctions.sh
 
       - name: Run changefunctions.sh
-        run: .github/scripts/changefunctions.sh
+        run: .github/scripts/changefunctions.sh; git status
 
       - name: Commit and push changes
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
-          git add src/main/java/com/tricentis/swan/station/functions/*.java
-          git commit -m "🔁 Auto-update 2 random function classes" || echo "No changes to commit"
-          git push
+          CHANGED=$(git status --porcelain | grep 'src/main/java/com/tricentis/swan/station/functions/.*\.java' | wc -l)
+          if [ "$CHANGED" -gt 0 ]; then
+            git add src/main/java/com/tricentis/swan/station/functions/*.java
+            git commit -m "🔁 Auto-update 2 random function classes"
+            git push
+          else
+            echo "No Java file changes to commit"
+          fi
 
   call-build-run-test:
     needs: roll-functions
-    uses: .github/workflows/build-run-test.yaml
+    uses: ./.github/workflows/build-run-test.yaml
     with:
       environment: Local
