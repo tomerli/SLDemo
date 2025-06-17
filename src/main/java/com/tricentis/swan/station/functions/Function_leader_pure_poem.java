@@ -1,4 +1,4 @@
-// Function class: Function_leader_pure_poem - Updated automatically
+
 package com.tricentis.swan.station.functions;
 
 import org.springframework.stereotype.Component;
