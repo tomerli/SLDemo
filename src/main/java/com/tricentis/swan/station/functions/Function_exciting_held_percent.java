@@ -1,4 +1,4 @@
-// Function class: Function_exciting_held_percent - Updated automatically
+
 package com.tricentis.swan.station.functions;
 
 import org.springframework.stereotype.Component;
@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 public class Function_exciting_held_percent implements Function {
     @Override
     public String execute() {
-        System.out.println("function_exciting_held_percent executed."".");;
+        System.out.println("function_exciting_held_percent executed.");;
         return "function_exciting_held_percent executed";
     }
 }
