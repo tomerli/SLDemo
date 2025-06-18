@@ -47,5 +47,6 @@ jobs:
   call-build-run-test:
     needs: roll-functions
     uses: ./.github/workflows/build-run-test.yaml
+    secrets: inherit
     with:
       environment: Local
