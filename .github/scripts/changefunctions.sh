@@ -25,28 +25,24 @@ for file in "${java_files[@]}"; do
 done
 echo ""
 
+# Timestamp comment
+timestamp="// Updated by GitHub Actions on $(date -u +"%Y-%m-%dT%H:%M:%SZ")"
+
 # Process each selected file
 for file in "${java_files[@]}"; do
-  # Remove period after 'executed' if present
-  sed -i -E 's/(System\.out\.println\("function[[:alnum:]_]+ executed)\.(\"\s*;)/\1\2/' "$file"
+  # Normalize System.out.println punctuation
+  sed -i -E 's/(System\.out\.println\("function[[:alnum:]_]+ executed)\.*("\s*;)/\1.\2/' "$file"
 
-  # Add period if missing
-  sed -i -E 's/(System\.out\.println\("function[[:alnum:]_]+ executed)(\"\s*;)/\1.\2/' "$file"
+  # Add or update the timestamp comment at the top
+  tmp_file=$(mktemp)
+  awk -v ts="$timestamp" '
+    NR == 1 && /^\/\/ Updated by GitHub Actions on/ { print ts; next }
+    NR == 1 { print ts; print; next }
+    { print }
+  ' "$file" > "$tmp_file" && mv "$tmp_file" "$file"
 
   echo " Updated: $(basename "$file" .java)"
 done
-
-
-# Force a visible change by updating a timestamp comment
-timestamp="// Updated by GitHub Actions on $(date -u +"%Y-%m-%dT%H:%M:%SZ")"
-
-tmp_file=$(mktemp)
-awk -v ts="$timestamp" '
-  NR == 1 && /^\/\/ Updated by GitHub Actions on/ { print ts; next }
-  NR == 1 { print ts; print }
-  NR > 1 { print }
-' "$file" > "$tmp_file" && mv "$tmp_file" "$file"
-
 
 echo ""
 echo "Done updating 2 function classes."
