@@ -3,7 +3,7 @@ name: Randomly Update Functions
 on:
   schedule:
     - cron: '0 * * * *'  # Every hour
-  workflow_dispatch:      # Manual trigger
+  workflow_dispatch:
 
 permissions: write-all
 
@@ -21,8 +21,14 @@ jobs:
       - name: Make script executable
         run: chmod +x .github/scripts/changefunctions.sh
 
-      - name: Run changefunctions.sh
-        run: .github/scripts/changefunctions.sh; git status
+      - name: Run changefunctions.sh and extract filenames
+        id: run_script
+        run: |
+          mapfile -t myFiles < <(.github/scripts/changefunctions.sh | awk '/^ - / { print $2 }')
+          myFileOne="${myFiles[0]}"
+          myFileTwo="${myFiles[1]}"
+          echo "file_one=$myFileOne" >> $GITHUB_OUTPUT
+          echo "file_two=$myFileTwo" >> $GITHUB_OUTPUT
 
       - name: Commit and push changes
         run: |
@@ -30,9 +36,10 @@ jobs:
           git config user.email "github-actions@github.com"
           CHANGED=$(git status --porcelain | grep 'src/main/java/com/tricentis/swan/station/functions/.*\.java' | wc -l)
           if [ "$CHANGED" -gt 0 ]; then
-            git add src/main/java/com/tricentis/swan/station/functions/*.java
-            git commit -m "🔁 Auto-update 2 random function classes"
-            git push
+            git add src/main/java/com/tricentis/swan/station/functions/${{ steps.run_script.outputs.file_one }}
+            git add src/main/java/com/tricentis/swan/station/functions/${{ steps.run_script.outputs.file_two }}
+            git commit -m "updated two functions: ${{ steps.run_script.outputs.file_one }} and ${{ steps.run_script.outputs.file_two }}"
+            git push origin HEAD
           else
             echo "No Java file changes to commit"
           fi
