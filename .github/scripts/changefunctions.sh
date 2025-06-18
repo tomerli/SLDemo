@@ -31,7 +31,7 @@ timestamp="// Updated by GitHub Actions on $(date -u +"%Y-%m-%dT%H:%M:%SZ")"
 # Process each selected file
 for file in "${java_files[@]}"; do
   # Normalize System.out.println punctuation
-  sed -i -E 's/(System\.out\.println\("function[[:alnum:]_]+ executed)\.*("\s*;)/\1.\2/' "$file"
+  sed -i -E 's|(System\.out\.println\("function[[:alnum:]_]+ executed)\.*("\s*;)|\1.\2|' "$file"
 
   # Add or update the timestamp comment at the top
   tmp_file=$(mktemp)
