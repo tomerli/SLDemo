@@ -3,7 +3,7 @@ name: Randomly Update Functions
 on:
   schedule:
     - cron: '0 * * * *'  # Every hour
-  workflow_dispatch:      # Manual trigger
+  workflow_dispatch:
 
 permissions: write-all
 
@@ -29,6 +29,15 @@ jobs:
           myFileTwo="${myFiles[1]}"
           echo "file_one=$myFileOne" >> $GITHUB_OUTPUT
           echo "file_two=$myFileTwo" >> $GITHUB_OUTPUT
+
+      - name: Fix System.out.println punctuation
+        run: |
+          for file in "${{ steps.run_script.outputs.file_one }}" "${{ steps.run_script.outputs.file_two }}"; do
+            fullpath="src/main/java/com/tricentis/swan/station/functions/$file"
+            if [[ -f "$fullpath" ]]; then
+              sed -i -E 's/(System\.out\.println\(".*?)(\.?)"\);/\1\./);/' "$fullpath"
+            fi
+          done
 
       - name: Commit and push changes
         run: |
