@@ -32,6 +32,7 @@ jobs:
 
       - name: Commit and push changes
         run: |
+          git pull
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
           CHANGED=$(git status --porcelain | grep 'src/main/java/com/tricentis/swan/station/functions/.*\.java' | wc -l)
