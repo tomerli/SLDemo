@@ -37,7 +37,7 @@ out/
 .vscode/
 
 # SeaLights
-sealights/**
-sltoken.txt
-buildSessionId.txt
+#sealights/**
+#sltoken.txt
+#buildSessionId.txt
 node_modules
