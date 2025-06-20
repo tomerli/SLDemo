@@ -24,25 +24,20 @@ done
 echo ""
 
 # Timestamp comment
-#timestamp="// Updated by GitHub Actions on $(date -u +"%Y-%m-%dT%H:%M:%SZ")"
+timestamp="// Updated by GitHub Actions on $(date -u +"%Y-%m-%dT%H:%M:%SZ")"
 
 # Process each selected file
 for file in "${java_files[@]}"; do
   # Toggle System.out.println punctuation (add period if missing, remove if present)
-  sed -i '' '/System\.out\.println/ {
-s/executed\."/executed"/
-t
-s/executed"/executed."/
-}' "$file"
+  sed -i '' '/System\.out\.println/ s/executed\."/executed"/; /System\.out\.println.*executed"[^.]/ s/executed"/executed."/' "$file"
   
   # Add or update the timestamp comment at the top
-  
-#  tmp_file=$(mktemp)
-#  awk -v ts="$timestamp" '
-#    NR == 1 && /^\/\/ Updated by GitHub Actions on/ { print ts; next }
-#    NR == 1 { print ts; print; next }
-#    { print }
-#  ' "$file" > "$tmp_file" && mv "$tmp_file" "$file"
+  tmp_file=$(mktemp)
+  awk -v ts="$timestamp" '
+    NR == 1 && /^\/\/ Updated by GitHub Actions on/ { print ts; next }
+    NR == 1 { print ts; print; next }
+    { print }
+  ' "$file" > "$tmp_file" && mv "$tmp_file" "$file"
   
   echo " Updated: $(basename "$file" .java)"
 done
