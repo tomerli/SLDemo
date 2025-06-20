@@ -29,7 +29,13 @@ timestamp="// Updated by GitHub Actions on $(date -u +"%Y-%m-%dT%H:%M:%SZ")"
 # Process each selected file
 for file in "${java_files[@]}"; do
   # Toggle System.out.println punctuation (add period if missing, remove if present)
-  sed -i '' '/System\.out\.println/ s/executed\."/executed"/; /System\.out\.println.*executed"[^.]/ s/executed"/executed."/' "$file"
+  if grep -q 'System\.out\.println.*executed\."' "$file"; then
+    # Remove period if it exists
+    sed -i '' 's/\(System\.out\.println.*executed\)\./\1/' "$file"
+  else
+    # Add period if it doesn't exist
+    sed -i '' 's/\(System\.out\.println.*executed\)"/\1."/' "$file"
+  fi
   
   # Add or update the timestamp comment at the top
   tmp_file=$(mktemp)
