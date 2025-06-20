@@ -31,10 +31,10 @@ for file in "${java_files[@]}"; do
   # Toggle System.out.println punctuation (add period if missing, remove if present)
   if grep -q 'System\.out\.println.*executed\."' "$file"; then
     # Remove period if it exists
-    sed -i '' 's/\(System\.out\.println.*executed\)\./\1/' "$file"
+    sed -i 's/\(System\.out\.println.*executed\)\./\1/' "$file"
   else
     # Add period if it doesn't exist
-    sed -i '' 's/\(System\.out\.println.*executed\)"/\1."/' "$file"
+    sed -i 's/\(System\.out\.println.*executed\)"/\1."/' "$file"
   fi
   
   # Add or update the timestamp comment at the top
