@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 public class Function_cold_dream_paint implements Function {
     @Override
     public String execute() {
-        System.out.println("function_cold_dream_paint executed");
+        System.out.println("function_cold_dream_paint executed.");
         return "function_cold_dream_paint executed";
     }
 }
