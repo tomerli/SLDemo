@@ -63,8 +63,8 @@ jobs:
             -appname "swan-java-ian" \
             -branchname "${{ github.ref_name }}" \
             -buildname "$(date +%s)" \
-            -pi "*com.tricentis.swan.station.*" \
-            SLBuildNum=$((date +%s))
+            -pi "*com.tricentis.swan.station.*" 
+           
 
       - name: "SeaLights: Scan"
         run: |
@@ -166,8 +166,8 @@ jobs:
             --base-url http://swan-station:9999/ \
             --sealights-lab-id swan-ian \
             --suite "Demo" \
-            --result-label ${{github.run_number}} \
-            --result-label $SLBuildNum
+            --result-label ${{github.run_number}} 
+        
 
       - name: Stop and remove Docker Compose services
         if: always()
