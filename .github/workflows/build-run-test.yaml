@@ -63,7 +63,7 @@ jobs:
             -appname "swan-java-ian" \
             -branchname "${{ github.ref_name }}" \
             -buildname "$(date +%s)" \
-            -pi "*com.tricentis.swan.station.*"
+            -pi "*com.tricentis.swan.station.*" \
             SLBuildNum=$((date +%s))
 
       - name: "SeaLights: Scan"
