@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 public class Function_minute_higher_choice implements Function {
     @Override
     public String execute() {
-        System.out.println("function_minute_higher_choice executed.");
+        System.out.println("function_minute_higher_choice executed");
         return "function_minute_higher_choice executed";
     }
 }
