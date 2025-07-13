@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 public class Function_exchange_black_small implements Function {
     @Override
     public String execute() {
-        System.out.println("function_exchange_black_small executed");
+        System.out.println("function_exchange_black_small executed.");
         return "function_exchange_black_small executed";
     }
 }
