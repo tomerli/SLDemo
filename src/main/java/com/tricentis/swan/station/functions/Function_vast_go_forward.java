@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 public class Function_vast_go_forward implements Function {
     @Override
     public String execute() {
-        System.out.println("function_vast_go_forward executed");
+        System.out.println("function_vast_go_forward executed.");
         return "function_vast_go_forward executed";
     }
 }
