@@ -7,7 +7,7 @@ package functions;
  */
 public class FunctionWonExamineChain {
     public String functionWonExamineChain() {
-        System.out.println("functionWonExamineChain executed.");
+        System.out.println("functionWonExamineChain executed");
         return "functionWonExamineChain executed";
     }
 }
