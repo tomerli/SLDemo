@@ -165,7 +165,7 @@ jobs:
             --mode selenium \
             --base-url http://swan-station:9999/ \
             --sealights-lab-id swan-tomer \
-            --suite "Demo" \
+            --suite "SLDemo" \
             --result-label ${{github.run_number}} 
         
 
