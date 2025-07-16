@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 public class Function_effort_land_garage implements Function {
     @Override
     public String execute() {
-        System.out.println("function_effort_land_garage executed.");
+        System.out.println("function_effort_land_garage executed");
         return "function_effort_land_garage executed";
     }
 }
