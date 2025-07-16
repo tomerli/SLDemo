@@ -60,7 +60,7 @@ jobs:
         run: |
           java -jar ./sealights/sl-build-scanner.jar -config \
             -tokenfile sltoken.txt \
-            -appname "swan-java-ian" \
+            -appname "swan-java-tomer" \
             -branchname "${{ github.ref_name }}" \
             -buildname "$(date +%s)" \
             -pi "*com.tricentis.swan.station.*" 
@@ -144,7 +144,7 @@ jobs:
       - name: Build and run with Docker Compose
         env:
           SL_buildSessionId: ${{ needs.build.outputs.buildSessionId }}
-          SL_labId: swan-ian
+          SL_labId: swan-tomer
           SL_token: ${{ secrets.SEALIGHTS_TOKEN }}
         run: |
           echo "${{ steps.decrypt-sealights-token.outputs.value }}" > sltoken.txt
@@ -164,7 +164,7 @@ jobs:
             --headless \
             --mode selenium \
             --base-url http://swan-station:9999/ \
-            --sealights-lab-id swan-ian \
+            --sealights-lab-id swan-tomer \
             --suite "Demo" \
             --result-label ${{github.run_number}} 
         
