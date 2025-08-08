@@ -8,7 +8,7 @@ package functions;
  */
 public class FunctionWrappedFearSea {
     public String functionWrappedFearSea() {
-        System.out.println("functionWrappedFearSea executed.");
+        System.out.println("functionWrappedFearSea executed");
         return "functionWrappedFearSea executed";
     }
 }
