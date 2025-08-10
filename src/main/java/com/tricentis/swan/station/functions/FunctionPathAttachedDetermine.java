@@ -7,7 +7,7 @@ package functions;
  */
 public class FunctionPathAttachedDetermine {
     public String functionPathAttachedDetermine() {
-        System.out.println("functionPathAttachedDetermine executed");
+        System.out.println("functionPathAttachedDetermine executed.");
         return "functionPathAttachedDetermine executed";
     }
 }
