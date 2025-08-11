@@ -9,7 +9,7 @@ public class Function_crack_least_larger implements Function {
     @Override
    
     public String execute() {
-        System.out.println("function_crack_least_larger executed");
+        System.out.println("function_crack_least_larger executed.");
         return "function_crack_least_larger executed";
     }
 }
