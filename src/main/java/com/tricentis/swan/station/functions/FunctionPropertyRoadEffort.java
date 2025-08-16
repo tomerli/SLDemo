@@ -7,7 +7,7 @@ package functions;
  */
 public class FunctionPropertyRoadEffort {
     public String functionPropertyRoadEffort() {
-        System.out.println("functionPropertyRoadEffort executed");
+        System.out.println("functionPropertyRoadEffort executed.");
         return "functionPropertyRoadEffort executed";
     }
 }
