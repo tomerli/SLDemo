@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 public class Function_weight_rabbit_begun implements Function {
     @Override
     public String execute() {
-        System.out.println("function_weight_rabbit_begun executed");
+        System.out.println("function_weight_rabbit_begun executed.");
         return "function_weight_rabbit_begun executed";
     }
 }
